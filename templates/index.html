@@ -48,31 +48,44 @@
 
     document.getElementById("board").innerHTML = html;
 
+
     // Update score display
 
     document.getElementById("score-display").textContent =
-        `A: ${data.score_A.quan} ♦ ${data.score_A.dan} | B: ${data.score_B.quan} ♦ ${data.score_B.dan}`;
+    `A: ${data.score_A.dan} ♦ ${data.score_A.quan} ⚫ | B: ${data.score_B.dan} ♦ ${data.score_B.quan} ⚫`;
+
 
     const aiMoveEl = document.getElementById("ai-move");
     const resultEl = document.getElementById("game-result");
 
     if (data.game_over) {
-        // Hide AI move and show result
-        aiMoveEl.style.display = "none";
-        resultEl.style.display = "block";
-        resultEl.innerHTML = `
-            🏆 ${data.winner}<br>
-            Final Score:<br>
-            Player A: ${data.total_A}<br>
-            Player B: ${data.total_B}
-        `;
-        document.getElementById("direction-overlay").style.display = "none";
-    } else {
+    aiMoveEl.style.display = "none";
+    resultEl.style.display = "block";
+    resultEl.innerHTML = `
+        🏆 ${data.winner}<br>
+        Final Score:<br>
+        Player A: ${data.total_A}<br>
+        Player B: ${data.total_B}
+    `;
+    document.getElementById("direction-overlay").style.display = "none";
+    document.getElementById("play-again").style.display = "inline-block";
+    }
+
+    else {
         // Show AI move
         aiMoveEl.style.display = "block";
         aiMoveEl.textContent = data.ai_move || "";
         resultEl.style.display = "none";
     }
+
+
+    }
+    async function resetGame() {
+    const res = await fetch("/reset", { method: "POST" });
+    const data = await res.json();
+    updateBoard(data);
+    document.getElementById("game-result").style.display = "none";
+    document.getElementById("play-again").style.display = "none";
     }
 
 
@@ -162,20 +175,14 @@
     </div>
     <div id="direction-overlay" style="display:none; text-align:center; margin-top:10px;">
         <p>Choose direction:</p>
-        <button onclick="submitMove(-1)">↩️ Counterclockwise</button>
-        <button onclick="submitMove(1)">↪️ Clockwise</button>
+        <button onclick="submitMove(-1)">Counterclockwise</button>
+        <button onclick="submitMove(1)"> Clockwise</button>
     </div>
     <div id="game-info" style="text-align: center; margin-top: 20px;">
-      <h2 id="score-display">A: 0 ♦ 0 | B: 0 ♦ 0</h2>
+      <h2 id="score-display">A: 0 ⚫ 0 ♦ | B: 0 ⚫ 0 ♦</h2>
       <p id="ai-move" style="font-style: italic;"></p>
       <h3 id="game-result" style="display: none; color: darkgreen;"></h3>
+        <button id="play-again" style="display:none; margin-top: 10px;" onclick="resetGame()">Play Again</button>
     </div>
-
-
-
-
-
-
-
 </body>
 </html>
