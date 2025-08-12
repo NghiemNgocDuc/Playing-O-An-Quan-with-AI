@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ô Ăn Quan</title>
+    <script>
+    let selectedPos = null;
+
+    function renderSquare(index, contents, className = "", isPlayerA = true) {
+        const seedMap = { "dan": "♦", "quan": "⚫" };
+        const display = contents.map(s => seedMap[s] || "?").join("");
+        const clickable = isPlayerA && index >= 1 && index <= 5 && contents.length > 0;
+        const clickAttr = clickable ? `onclick="selectSquare(${index})"` : "";
+        return `<div class="square ${className}" ${clickAttr}>[${index}]<br>${display}</div>`;
+    }
+
+    function selectSquare(pos) {
+        selectedPos = pos;
+        document.getElementById("direction-overlay").style.display = "block";
+    }
+
+    async function submitMove(step) {
+        if (selectedPos === null) return;
+        const res = await fetch("/move", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pos: selectedPos, step })
+        });
+        const data = await res.json();
+        updateBoard(data);
+        selectedPos = null;
+        document.getElementById("direction-overlay").style.display = "none";
+    }
+
+    function updateBoard(data) {
+    const b = data.board;
+    let html = "";
+
+    html += renderSquare(11, b[11], "quan-left", false);
+    for (let i = 6; i <= 10; i++) {
+        html += renderSquare(i, b[i], "top", false);
+    }
+    html += renderSquare(0, b[0], "quan-right", false);
+    html += renderSquare(11, b[11], "quan-left", false);
+    for (let i = 5; i >= 1; i--) {
+        html += renderSquare(i, b[i], "bottom", true);
+    }
+    html += renderSquare(0, b[0], "quan-right", false);
+
+    document.getElementById("board").innerHTML = html;
+
+    // Update score display
+
+    document.getElementById("score-display").textContent =
+        `A: ${data.score_A.quan} ♦ ${data.score_A.dan} | B: ${data.score_B.quan} ♦ ${data.score_B.dan}`;
+
+    const aiMoveEl = document.getElementById("ai-move");
+    const resultEl = document.getElementById("game-result");
+
+    if (data.game_over) {
+        // Hide AI move and show result
+        aiMoveEl.style.display = "none";
+        resultEl.style.display = "block";
+        resultEl.innerHTML = `
+            🏆 ${data.winner}<br>
+            Final Score:<br>
+            Player A: ${data.total_A}<br>
+            Player B: ${data.total_B}
+        `;
+        document.getElementById("direction-overlay").style.display = "none";
+    } else {
+        // Show AI move
+        aiMoveEl.style.display = "block";
+        aiMoveEl.textContent = data.ai_move || "";
+        resultEl.style.display = "none";
+    }
+    }
+
+
+
+
+    window.onload = async function() {
+        const res = await fetch("/state");
+        const data = await res.json();
+        updateBoard(data);
+    };
+    </script>
+
+
+
+
+
+
+    <style>
+    .board-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .board-grid {
+        display: grid;
+        grid-template-areas:
+            "quan-left top top top top top quan-right"
+            "quan-left bottom bottom bottom bottom bottom quan-right";
+        grid-template-columns: auto repeat(5, 120px) auto;
+        grid-template-rows: 100px 100px;
+        gap: 10px;
+    }
+
+    .square {
+        border: 2px solid #333;
+        padding: 10px;
+        text-align: center;
+        font-size: 24px;
+        background-color: #fffbe6;
+        box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        border-radius: 8px;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        cursor: pointer;
+    }
+
+    .square.quan-left {
+        grid-area: quan-left;
+        align-self: center;
+    }
+
+    .square.quan-right {
+        grid-area: quan-right;
+        align-self: center;
+    }
+
+    .square.top {
+        grid-row: 1;
+    }
+
+    .square.bottom {
+        grid-row: 2;
+    }
+
+    #score {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    #game-info h2, #game-info h3, #game-info p {
+        margin: 10px 0;
+    }
+
+    </style>
+
+
+
+
+</head>
+<body>
+    <h1>Ô Ăn Quan</h1>
+    <div class="board-container">
+        <div id="board" class="board-grid"></div>
+
+    </div>
+    <div id="direction-overlay" style="display:none; text-align:center; margin-top:10px;">
+        <p>Choose direction:</p>
+        <button onclick="submitMove(-1)">↩️ Counterclockwise</button>
+        <button onclick="submitMove(1)">↪️ Clockwise</button>
+    </div>
+    <div id="game-info" style="text-align: center; margin-top: 20px;">
+      <h2 id="score-display">A: 0 ♦ 0 | B: 0 ♦ 0</h2>
+      <p id="ai-move" style="font-style: italic;"></p>
+      <h3 id="game-result" style="display: none; color: darkgreen;"></h3>
+    </div>
+
+
+
+
+
+
+
+</body>
+</html>
