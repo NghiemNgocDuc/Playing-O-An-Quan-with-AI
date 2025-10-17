@@ -48,7 +48,6 @@
 
     document.getElementById("board").innerHTML = html;
 
-
     // Update score display
 
     document.getElementById("score-display").textContent =
@@ -88,20 +87,12 @@
     document.getElementById("play-again").style.display = "none";
     }
 
-
-
-
     window.onload = async function() {
         const res = await fetch("/state");
         const data = await res.json();
         updateBoard(data);
     };
     </script>
-
-
-
-
-
 
     <style>
     .board-container {
@@ -162,9 +153,6 @@
     }
 
     </style>
-
-
-
 
 </head>
 <body>
