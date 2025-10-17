@@ -117,8 +117,6 @@
 #
 # if __name__ == "__main__": # run the app
 #     app.run(debug=True)
-
-
 from flask import Flask, render_template, request, jsonify
 import importlib
 
@@ -132,13 +130,13 @@ from game_logic import (
 
 app = Flask(__name__)
 
-# ————— Global Game State —————
+# Global Game State 
 board = initialize_board()
 score_A = {"dan": 0, "quan": 0}
 score_B = {"dan": 0, "quan": 0}
 is_player_A = True
 
-# ————— Load Default AI Model —————
+# Load Default AI Model 
 # We dynamically import the module so switch_model can swap it later.
 ai_module = importlib.import_module("models.value_iteration")
 
@@ -151,7 +149,7 @@ def init_policy():
     if hasattr(ai_module, "init_policy"):
         ai_module.init_policy()
 
-# ————— Routes —————
+# Routes
 
 @app.route("/")
 def index():
