@@ -1,6 +1,6 @@
 import copy
 
-# 🐚 Game Setup
+
 def initialize_board():
     return [["quan"], ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5,
             ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["quan"]]
