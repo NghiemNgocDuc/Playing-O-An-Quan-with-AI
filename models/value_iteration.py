@@ -21,12 +21,6 @@
 #
 # return π
 
-
-
-
-
-
-
 import copy
 
 
