@@ -1,5 +1,3 @@
-# 🐚 Ô Ăn Quan – Traditional Vietnamese Board Game
-
 board = [["quan"], ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5,
          ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["quan"]]
 
