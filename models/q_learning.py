@@ -1,14 +1,6 @@
-
-
-
 Q_table = {}  # Format: {(state_repr, action): value}
 
 TRAINING_MODE = False  # Set to False when you want to play manually
-
-
-
-
-
 
 import json
 try:
@@ -16,8 +8,6 @@ try:
         Q_table = json.load(f)
 except:
     Q_table = {}
-
-
 
 board = [["quan"], ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5,
          ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["dan"] * 5, ["quan"]]
@@ -265,4 +255,3 @@ while not game_over(board, score_A, score_B):
 
 with open("q_table.json", "w") as f:
     json.dump({str(k): v for k, v in Q_table.items()}, f)
-
