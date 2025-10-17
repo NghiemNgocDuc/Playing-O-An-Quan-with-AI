@@ -1,5 +1,4 @@
 # game_logic.py
-
 def initialize_board():
     return [
         ["quan"],  # 0
@@ -65,7 +64,6 @@ def restore_player_side(board, score, is_player_A):
         for i in side_range:
             board[i].append("dan")
 
-
 def game_over(board, score_A, score_B):
     # Game ends if all quan are captured
     quan_empty = score_A["quan"] + score_B["quan"] == 2
@@ -82,7 +80,6 @@ def game_over(board, score_A, score_B):
         return True
 
     return False
-
 
 def get_board_state(board):
     # Returns a simplified version of the board for frontend or testing
@@ -101,6 +98,7 @@ def get_scores(score_A, score_B):
             "total": calculate_score(score_B["dan"], score_B["quan"])
         }
     }
+    
 def check_game_end(board, score_A, score_B):
     # Check if all player squares [1] to [10] are empty
     if all(len(board[i]) == 0 for i in range(1, 11)):
@@ -122,4 +120,3 @@ def check_game_end(board, score_A, score_B):
         }
 
     return { "game_over": False }
-
