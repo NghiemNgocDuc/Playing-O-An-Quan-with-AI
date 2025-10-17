@@ -1,15 +1,8 @@
-
-
 episode = []  # Store (state, action, reward) for Monte Carlo
 
 Q_table = {}  # Format: {(state_repr, action): value}
 
 TRAINING_MODE = True  # Set to False when you want to play manually
-
-
-
-
-
 
 import json
 try:
@@ -257,5 +250,3 @@ monte_carlo_update(Q_table, episode)
 #Save Q-table
 with open("q_table.json", "w") as f:
     json.dump({str(k): v for k, v in Q_table.items()}, f)
-
-
