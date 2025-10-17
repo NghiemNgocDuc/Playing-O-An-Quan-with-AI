@@ -33,7 +33,7 @@ NumPy, Pandas for data representation
 + git clone https://github.com/NghiemNgocDuc/Playing-O-An-Quan-with-AI.git
 + cd Playing-O-An-Quan-with-AI
 - Run the game
-  python app.py
++ python app.py
 
 # Future Improvements
 - Reinforcement learning with neural networks.
